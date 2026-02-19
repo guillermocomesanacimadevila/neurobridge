@@ -8,18 +8,12 @@
 
 ## Authors
 
-<p align="center">
+**Guillermo Comesaña Cimadevila¹²**,  
+Dervis Salih¹³, Nicholas Bray², Emily Simmonds¹, Valentina Escott-Price¹²  
 
-<strong>Guillermo Comesaña Cimadevila<sup>1,2</sup></strong><br>
-Dervis Salih<sup>1,3</sup> · Nicholas Bray<sup>2</sup> · Emily Simmonds<sup>1</sup> · Valentina Escott-Price<sup>1,2</sup>
-
-<br><br>
-
-<sup>1</sup> UK Dementia Research Institute, UK 
-<sup>2</sup> MRC Centre for Neuropsychiatric Genetics & Genomics, Cardiff University, Cardiff, UK  
-<sup>3</sup> Department of Neuroscience, Physiology and Pharmacology, University College London (UCL), London, UK  
-
-</p>
+¹ UK Dementia Research Institute, UK  
+² MRC Centre for Neuropsychiatric Genetics & Genomics, Cardiff University, Cardiff, UK  
+³ Department of Neuroscience, Physiology and Pharmacology, University College London (UCL), London, UK  
 
 ---
 

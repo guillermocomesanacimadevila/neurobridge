@@ -1,4 +1,4 @@
-# neurobridge v1
+<img width="2300" height="901" alt="nf-core-neurobridge_logo_light" src="https://github.com/user-attachments/assets/7ff124df-c97d-44e2-b51a-6617a80ad61d" />
 
 > *Multi-layer pipeline for cross-trait molecular discovery*
 

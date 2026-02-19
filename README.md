@@ -1,4 +1,11 @@
-# neurobridge 
+# neurobridge v1
+
+> *Multi-layer pipeline for cross-trait molecular discovery*
+
+--
+
+**Authors:**  
+Guillermo Comesaña Cimadevila · Dervis Salih · Nicholas Bray · Emily Simmonds · Valentina Escott-Price  
 
 ---
 

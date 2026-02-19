@@ -15,8 +15,8 @@ UK Dementia Research Institute
 
 ---
 
-[![Python](https://img.shields.io/badge/Python-3.8%2B-3776AB)]() 
-[![R](https://img.shields.io/badge/R-4.0%2B-276DC3)]() 
+[![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB)]() 
+[![R](https://img.shields.io/badge/R-4.4%2B-276DC3)]() 
 [![Run with Conda](https://img.shields.io/badge/Run%20with-Conda-44A833)]() 
 [![Nextflow DSL2](https://img.shields.io/badge/Nextflow-DSL2-23aa62)](https://www.nextflow.io/) 
 [![Docker](https://img.shields.io/badge/Container-Docker-2496ED)](https://www.docker.com/) 

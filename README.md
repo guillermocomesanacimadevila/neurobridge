@@ -10,10 +10,12 @@
 
 ---
 
-<p align="center">
-<b>Authors</b><br>
-Guillermo Comesaña Cimadevila · Dervis Salih · Nicholas Bray · Emily Simmonds · Valentina Escott-Price
-</p>
+### Authors
+
+**Guillermo Comesaña Cimadevila**  
+UK Dementia Research Institute
+
+**Dervis Salih · Nicholas Bray · Emily Simmonds · Valentina Escott-Price**
 
 ---
 
@@ -21,7 +23,7 @@ Guillermo Comesaña Cimadevila · Dervis Salih · Nicholas Bray · Emily Simmond
 [![R](https://img.shields.io/badge/R-4.0%2B-276DC3)]()  
 [![Run with Conda](https://img.shields.io/badge/Run%20with-Conda-44A833)]()  
 [![Nextflow DSL2](https://img.shields.io/badge/Nextflow-DSL2-23aa62)](https://www.nextflow.io/)  
-[![Docker](https://img.shields.io/badge/Container-Docker-2496ED)](https://www.docker.com/) 
+[![Docker](https://img.shields.io/badge/Container-Docker-2496ED)](https://www.docker.com/)  
 [![Reference](https://img.shields.io/badge/Docs-auto--generated-green)](zenodo)
 
 ---

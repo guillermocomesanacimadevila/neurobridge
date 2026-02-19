@@ -11,3 +11,4 @@ logs/
 work/
 outputs/
 logs/
+modules/build_image.nf

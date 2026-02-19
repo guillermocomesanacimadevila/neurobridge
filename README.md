@@ -31,3 +31,14 @@ UK Dementia Research Institute
        alt="pipeline"
        width="1200">
 </p>
+
+---
+
+## Steps
+
+### Build Docker image
+
+´´´´bash
+cd neurobridge/
+docker build -t neurobridge:1 -f env/Dockerfile env/
+´´´´

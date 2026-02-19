@@ -28,6 +28,8 @@ UK Dementia Research Institute
 
 ---
 
+## Pipeline
+
 <p align="center">
   <img src="https://github.com/user-attachments/assets/b5573958-bb5b-4de9-bdf1-90afc54e0bfc"
        alt="pipeline"

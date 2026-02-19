@@ -1,0 +1,7 @@
+*.nf linguist-language=Nextflow
+*.nf linguist-detectable=true
+Dockerfile linguist-language=Dockerfile
+*.ipynb linguist-language=Python
+
+tests/* linguist-vendored
+scripts/* linguist-vendored

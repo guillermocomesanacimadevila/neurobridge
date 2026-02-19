@@ -4,10 +4,6 @@
        width="1600">
 </p>
 
-<p align="center">
-  <em>Multi-layer pipeline for cross-trait molecular discovery</em>
-</p>
-
 ---
 
 ### Authors

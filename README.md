@@ -38,7 +38,7 @@ UK Dementia Research Institute
 
 ### Build Docker image
 
-´´´bash
+```bash
 cd neurobridge/
 docker build -t neurobridge:1 -f env/Dockerfile env/
-´´´
+```

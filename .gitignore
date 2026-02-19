@@ -1,6 +1,13 @@
 .DS_Store
 .nextflow*
 .nextflow/
+data/
+InputFiles/
+ref/
+containers/
+jupyter/
+plots/
+logs/
 work/
 outputs/
 logs/

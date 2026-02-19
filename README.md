@@ -12,7 +12,7 @@
 
 ¹ UK Dementia Research Institute, UK  
 ² MRC Centre for Neuropsychiatric Genetics & Genomics, Cardiff University, Cardiff, UK  
-³ Department of Neuroscience, Physiology and Pharmacology, University College London (UCL), London, UK  
+³ Department of Neuroscience, Physiology and Pharmacology, University College London, London, UK  
 
 ---
 

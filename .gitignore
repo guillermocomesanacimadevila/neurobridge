@@ -7,7 +7,6 @@ ref/
 containers/
 jupyter/
 plots/
-conf/
 logs/
 work/
 outputs/

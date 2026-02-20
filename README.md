@@ -58,10 +58,9 @@ docker build -t neurobridge:1 -f env/Dockerfile env/
 ### Run neurobridge! (with Docker)
 
 ```bash
-nextflow run main.nf -profile docker \
+nextflow run main.nf -c conf/local/nextflow.config -profile docker \
   --input assets/gwas.tsv \
   --pairs assets/ldsc_pairs.tsv \
-  --outdir results \
-  -resume
+  --outdir results
 ```
 

@@ -37,6 +37,12 @@
 
 ## Steps
 
+### Download reference data 
+
+=> Zenodo link...
+
+---
+
 ### Build Docker image
 
 ```bash

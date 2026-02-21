@@ -3,7 +3,7 @@
 suppressPackageStartupMessages({library(GenomicSEM);library(data.table)})
 
 args <- commandArgs(trailingOnly=TRUE)
-if (length(args) < 11) stop("usage: Rscript ldsc.R pheno1_file pheno2_file pheno1_name pheno2_name case1 ctrl1 case2 ctrl2 pop_prev1 pop_prev2 out_root")
+if (length(args) < 14) stop("usage: Rscript ldsc.R pheno1_file pheno2_file pheno1_name pheno2_name case1 ctrl1 case2 ctrl2 pop_prev1 pop_prev2 out_root hm3 ld wld")
 
 pheno1_file <- args[1]
 pheno2_file <- args[2]
@@ -16,10 +16,9 @@ ctrl2 <- as.numeric(args[8])
 pop_prev1 <- as.numeric(args[9])
 pop_prev2 <- as.numeric(args[10])
 out_root <- args[11]
-
-hm3_path <- "/Users/c24102394/ref/ldsc/w_hm3.snplist"
-ld_path  <- "/Users/c24102394/ref/ldsc/eur_w_ld_chr"
-wld_path <- "/Users/c24102394/ref/ldsc/weights_hm3_no_hla"
+hm3_path <- args[12]
+ld_path <- args[13]
+wld_path <- args[14]
 
 in_files <- c(pheno1_file, pheno2_file)
 trait_names <- c(pheno1_name, pheno2_name)
@@ -46,19 +45,12 @@ munge(
 out_files <- file.path(getwd(), paste0(trait_names, ".sumstats.gz"))
 stopifnot(all(file.exists(out_files)))
 
-trait1_qc_dir <- dirname(pheno1_file)
-trait1_root <- dirname(trait1_qc_dir)
-trait1_ldscdir <- file.path(trait1_root, "post-ldsc")
+outdir <- out_root
+dir.create(outdir, showWarnings=FALSE, recursive=TRUE)
+pair_name <- paste0(pheno1_name,"_",pheno2_name)  
 
-trait2_qc_dir <- dirname(pheno2_file)
-trait2_root <- dirname(trait2_qc_dir)
-trait2_ldscdir <- file.path(trait2_root, "post-ldsc")
-
-dir.create(trait1_ldscdir, showWarnings=FALSE, recursive=TRUE)
-dir.create(trait2_ldscdir, showWarnings=FALSE, recursive=TRUE)
-
-file.copy(out_files[1], file.path(trait1_ldscdir, paste0(trait_names[1], ".sumstats.gz")), overwrite=TRUE)
-file.copy(out_files[2], file.path(trait2_ldscdir, paste0(trait_names[2], ".sumstats.gz")), overwrite=TRUE)
+file.copy(out_files[1], file.path(outdir, paste0(trait_names[1], ".sumstats.gz")), overwrite=TRUE)
+file.copy(out_files[2], file.path(outdir, paste0(trait_names[2], ".sumstats.gz")), overwrite=TRUE)
 
 ldsc_out <- ldsc(
   traits = out_files,
@@ -114,10 +106,6 @@ qc_out[, pass_mean := ifelse(is.na(mean_chisq), NA, mean_chisq > 1.02)]
 qc_out[, pass_int := Intercept >= 0.9 & Intercept <= 1.1]
 qc_out[, pass_all := ifelse(is.na(pass_mean), pass_h2z & pass_int, pass_h2z & pass_mean & pass_int)]
 print(qc_out[,.(Trait,h2,h2_se,h2_z,mean_chisq,Intercept,pass_all)])
-
-pair_name <- paste0(pheno1_name,"_",pheno2_name)
-outdir <- file.path(out_root, pair_name)
-dir.create(outdir, showWarnings=FALSE, recursive=TRUE)
 
 fwrite(qc_out, file.path(outdir, paste0("ldsc_trait_qc_",pair_name,".tsv")), sep="\t")
 write.csv(ldsc_out$S, file.path(outdir,"ldsc_S.csv"), row.names=FALSE)

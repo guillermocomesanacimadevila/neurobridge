@@ -6,6 +6,10 @@ suppressPackageStartupMessages({
   library(HDL)
 })
 
+# remotes::install_github("zhenin/HDL", subdir="HDL", upgrade="never")
+
+packageDescription("HDL")
+
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) < 12) {
   stop(paste(

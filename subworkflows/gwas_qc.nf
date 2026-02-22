@@ -9,10 +9,9 @@ workflow GWAS_QC {
   ch_in
 
   main:
-  ch_qc = QC_GWAS(ch_in).ldsc_ready
+  ch_qc   = QC_GWAS(ch_in).ldsc_ready
   ch_neff = ADD_NEFF(ch_qc).ldsc_neff
 
   emit:
-  ldsc_ready = ch_qc
   ldsc_neff = ch_neff
 }

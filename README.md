@@ -66,3 +66,31 @@ nextflow run main.nf \
   --outdir results
 ```
 
+# Packages Used
+
+## Heritability & Genetic Correlation
+- **[LDSC](https://github.com/bulik/ldsc)** – Linkage Disequilibrium Score Regression  
+- **[SumHer](https://github.com/zietzm/sumher_rs)** – Summary-based Heritability Estimation  
+- **[HDL / HDL-L](https://github.com/zhenin/HDL)** – High-Definition Likelihood (Global and Local)  
+- **[MiXeR](https://github.com/precimed/mixer)** – Mixture of Regressions  
+- **[LAVA](https://github.com/josefin-werme/LAVA)** – Local Analysis of [co]Variant Association  
+
+## Cross-trait Enrichment
+- **[condFDR / conjFDR](https://github.com/alexploner/cfdr.pleio)** – Conditional / Conjunctional False Discovery Rate  
+
+## GWAS Processing & Gene-Level Analysis
+- **[PLINK 2.0](https://www.cog-genomics.org/plink/2.0/)** – Whole-genome Association Analysis Toolset  
+- **[MAGMA](https://ctg.cncr.nl/software/magma)** – Multi-marker Analysis of GenoMic Annotation  
+
+## Fine-mapping & Colocalisation
+- **[COLOC](https://cran.r-project.org/web/packages/coloc/)** – Colocalisation Analysis  
+- **[SuSiE](https://github.com/stephenslab/susieR)** – Sum of Single Effects  
+
+## Functional Annotation & Mendelian Randomisation
+- **[FUMA](https://fuma.ctglab.nl/)** – Functional Mapping and Annotation  
+- **[SMR](https://yanglab.westlake.edu.cn/software/smr/)** – Summary-data-based Mendelian Randomization  
+
+## Single-cell Resources
+- **[CELLxGENE](https://chanzuckerberg.github.io/cellxgene-census/python-api.html)** – Single-cell Gene Expression Explorer  
+
+

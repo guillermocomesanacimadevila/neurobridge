@@ -86,9 +86,9 @@ nextflow run main.nf \
 - **[COLOC](https://cran.r-project.org/web/packages/coloc/)** – Colocalisation Analysis  
 - **[SuSiE](https://github.com/stephenslab/susieR)** – Sum of Single Effects  
 
-## Functional Annotation & Mendelian Randomisation
+## Functional Annotation & QTL Integration
 - **[FUMA](https://fuma.ctglab.nl/)** – Functional Mapping and Annotation  
-- **[SMR](https://yanglab.westlake.edu.cn/software/smr/)** – Summary-data-based Mendelian Randomization  
+- **[SMR](https://yanglab.westlake.edu.cn/software/smr/)** – Summary-data-based Mendelian Randomization (GWAS–QTL integration framework)  
 
 ## Single-cell Resources
 - **[CELLxGENE](https://chanzuckerberg.github.io/cellxgene-census/python-api.html)** – Single-cell Gene Expression Explorer  

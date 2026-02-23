@@ -83,7 +83,7 @@ nextflow run main.nf \
 - **[MAGMA](https://ctg.cncr.nl/software/magma)** – Multi-marker Analysis of GenoMic Annotation  
 
 ## Fine-mapping & Colocalisation
-- **[COLOC](https://cran.r-project.org/web/packages/coloc/)** – Colocalisation Analysis  
+- **[COLOC](https://cran.r-project.org/web/packages/coloc/)** – Bayesian Colocalisation Analysis  
 - **[SuSiE](https://github.com/stephenslab/susieR)** – Sum of Single Effects  
 
 ## Functional Annotation & QTL Integration

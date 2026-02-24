@@ -6,6 +6,7 @@ InputFiles/
 ref/
 containers/
 jupyter/
+tests/
 plots/
 logs/
 work/

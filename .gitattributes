@@ -4,6 +4,7 @@ slurm.config linguist-language=Nextflow linguist-detectable=true
 Dockerfile linguist-language=Dockerfile linguist-detectable=true
 **/Dockerfile linguist-language=Dockerfile linguist-detectable=true
 Dockerfile.* linguist-language=Dockerfile linguist-detectable=true
+env/** linguist-language=Dockerfile linguist-detectable=true
 *.ipynb linguist-language=Python
 tests/** linguist-vendored=true
 scripts/** linguist-vendored=true

@@ -8,9 +8,9 @@ base = Path("../outputs/susie")
 # pheno2_ic
 # coords -> need a way in nf to pull this from process
 
-def overlap(pheno1_id: str, pheno2_id: str, coords: str):
-    pheno1_path = base / pheno1_id / f"locus_{coords}" / f"cs_{pheno1_id}.tsv"
-    pheno2_path = base / pheno2_id / f"locus_{coords}" / f"cs_{pheno2_id}.tsv"
+def overlap(pheno1_id: str, pheno2_id: str, coords: str, L: str):
+    pheno1_path = base / pheno1_id / f"locus_{coords}" / f"L{L}" / f"cs95_{pheno1_id}_L{L}.tsv"
+    pheno2_path = base / pheno2_id / f"locus_{coords}" / f"L{L}" / f"cs95_{pheno2_id}_L{L}.tsv"
     pheno1_df = pd.read_csv(pheno1_path, sep="\t")
     pheno2_df = pd.read_csv(pheno2_path, sep="\t")
     merged = pheno1_df.merge(
@@ -29,8 +29,9 @@ def main():
     ap.add_argument("--pheno1_id", required=True)
     ap.add_argument("--pheno2_id", required=True)
     ap.add_argument("--coords", required=True)
+    ap.add_argument("--L", required=True)
     args = ap.parse_args()
-    overlap(args.pheno1_id, args.pheno2_id, args.coords)
+    overlap(args.pheno1_id, args.pheno2_id, args.coords, args.L)
 
 if __name__ == "__main__":
     main()

@@ -1,69 +1,72 @@
+#!/usr/bin/env python3
 from pathlib import Path
 import pandas as pd
+import os
+import argparse
 
-out_dir = Path("/Users/c24102394/Desktop/neurobridge/outputs/defined_loci/AD_SCZ")
-lead_snp = "rs383902"
-lead_snp2 = "rs11039131"
-lead_snp3 = "rs11777131"
-window = 500_000
-
-ad_gwas = pd.read_csv("/Users/c24102394/Desktop/neurobridge/data/AD/post-qc/AD.ldsc_ready_neff.tsv", sep="\t")
-scz_gwas = pd.read_csv("/Users/c24102394/Desktop/neurobridge/data/SCZ/post-qc/SCZ.ldsc_ready_neff.tsv", sep="\t")
-lon_gwas = pd.read_csv("/Users/c24102394/Desktop/neurobridge/data/LON/post-qc/LON.ldsc_ready_neff.tsv", sep="\t")
-
-ad_gwas.rename(columns={"POS": "BP"}, inplace=True)
-scz_gwas.rename(columns={"POS": "BP"}, inplace=True)
-lon_gwas.rename(columns={"POS": "BP"}, inplace=True)
-
+dat_base = Path("../data")
+base = Path("../outputs")
+results_base = Path("../results")
+out_dir = results_base / "defined_loci"
 out_dir.mkdir(parents=True, exist_ok=True)
 
-lead_snps = [
-    (lead_snp,  ["AD", "SCZ"]),
-    (lead_snp2, ["AD", "SCZ"]),
-    (lead_snp3, ["AD", "SCZ", "LON"]),
-]
+def define_loci(pheno1_prefix: str,
+                pheno2_prefix: str,
+                window: int):
 
-for snp, traits in lead_snps:
-    ad_lead = ad_gwas.loc[ad_gwas["SNP"] == snp].iloc[0]
-    chr_ = int(ad_lead["CHR"])
-    bp = int(ad_lead["BP"])
-    start = max(0, bp - window)
-    end = bp + window
-
-    ad_loc = ad_gwas.loc[(ad_gwas["CHR"] == chr_) & (ad_gwas["BP"] >= start) & (ad_gwas["BP"] <= end)].copy()
-    scz_loc = scz_gwas.loc[(scz_gwas["CHR"] == chr_) & (scz_gwas["BP"] >= start) & (scz_gwas["BP"] <= end)].copy()
-
-    if traits == ["AD", "SCZ"]:
-        common = ad_loc.merge(scz_loc[["SNP"]], on="SNP", how="inner")
-        ad_common = ad_loc.loc[ad_loc["SNP"].isin(common["SNP"])].copy()
-        scz_common = scz_loc.loc[scz_loc["SNP"].isin(common["SNP"])].copy()
-
-        ad_common = ad_common.sort_values(["CHR","BP","SNP"]).reset_index(drop=True)
-        scz_common = scz_common.sort_values(["CHR","BP","SNP"]).reset_index(drop=True)
-
-        locus_dir = out_dir / f"locus_chr{chr_}_{start}_{end}"
+    pheno1_df = pd.read_csv(dat_base / pheno1_prefix / "post-qc" / f"{pheno1_prefix}.ldsc_ready_neff.tsv", sep="\t")
+    pheno2_df = pd.read_csv(dat_base / pheno2_prefix / "post-qc" / f"{pheno2_prefix}.ldsc_ready_neff.tsv", sep="\t")
+    pheno1_df.rename(columns={"POS": "BP"}, inplace=True)
+    pheno2_df.rename(columns={"POS": "BP"}, inplace=True)
+    out = Path(out_dir / f"{pheno1_prefix}_{pheno2_prefix}")
+    out.mkdir(parents=True, exist_ok=True)
+    clump_path = base / f"clumping/{pheno1_prefix}_{pheno2_prefix}/{pheno1_prefix}-{pheno2_prefix}"
+    rows = []
+    for dir in os.listdir(clump_path):
+        full_path = clump_path / dir
+        if os.path.isdir(full_path) and dir.startswith("locus_"):
+            locus_coords = "_".join(dir.split("_")[-3:])
+            lead_file = full_path / "lead_snps.tsv"
+            lead_df = pd.read_csv(lead_file, sep="\t")
+            lead_snp = lead_df["lead_snp"].iloc[0]
+            rows.append({
+                "trait1": pheno1_prefix,
+                "trait2": pheno2_prefix,
+                "pair": f"{pheno1_prefix}_{pheno2_prefix}",
+                "locus": dir,
+                "coords": locus_coords,
+                "lead_snp": lead_snp
+            })
+    lead_snps_df = pd.DataFrame(rows, columns=["trait1", "trait2", "pair", "locus", "coords", "lead_snp"])
+    lead_snps_df = lead_snps_df.sort_values("coords").reset_index(drop=True)
+    for _, r in lead_snps_df.iterrows():
+        snp = r["lead_snp"]
+        lead1 = pheno1_df.loc[pheno1_df["SNP"] == snp].iloc[0]
+        chr_ = int(lead1["CHR"])
+        bp = int(lead1["BP"])
+        start = max(0, bp - window)
+        end = bp + window
+        pheno1_loc = pheno1_df.loc[(pheno1_df["CHR"] == chr_) & (pheno1_df["BP"] >= start) & (pheno1_df["BP"] <= end)].copy()
+        pheno2_loc = pheno2_df.loc[(pheno2_df["CHR"] == chr_) & (pheno2_df["BP"] >= start) & (pheno2_df["BP"] <= end)].copy()
+        common = pheno1_loc.merge(pheno2_loc[["SNP"]], on="SNP", how="inner")
+        pheno1_common = pheno1_loc.loc[pheno1_loc["SNP"].isin(common["SNP"])].copy()
+        pheno2_common = pheno2_loc.loc[pheno2_loc["SNP"].isin(common["SNP"])].copy()
+        pheno1_common = pheno1_common.sort_values(["CHR","BP","SNP"]).reset_index(drop=True)
+        pheno2_common = pheno2_common.sort_values(["CHR","BP","SNP"]).reset_index(drop=True)
+        locus_dir = out / f"locus_chr{chr_}_{start}_{end}"
         locus_dir.mkdir(parents=True, exist_ok=True)
-
-        ad_common.to_csv(locus_dir / "gwas_AD.ldgwas.tsv", sep="\t", index=False)
-        scz_common.to_csv(locus_dir / "gwas_SCZ.ldgwas.tsv", sep="\t", index=False)
+        pheno1_common.to_csv(locus_dir / f"gwas_{pheno1_prefix}.ldgwas.tsv", sep="\t", index=False)
+        pheno2_common.to_csv(locus_dir / f"gwas_{pheno2_prefix}.ldgwas.tsv", sep="\t", index=False)
         pd.DataFrame({"SNP": common["SNP"]}).sort_values("SNP").to_csv(locus_dir / "common_snps.tsv", sep="\t", index=False)
+    return lead_snps_df
 
-    else:
-        lon_loc = lon_gwas.loc[(lon_gwas["CHR"] == chr_) & (lon_gwas["BP"] >= start) & (lon_gwas["BP"] <= end)].copy()
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--pheno1_prefix", required=True)
+    ap.add_argument("--pheno2_prefix", required=True)
+    ap.add_argument("--window", type=int, default=500000)
+    args = ap.parse_args()
+    define_loci(args.pheno1_prefix, args.pheno2_prefix, args.window)
 
-        common = ad_loc.merge(scz_loc[["SNP"]], on="SNP", how="inner").merge(lon_loc[["SNP"]], on="SNP", how="inner")
-        ad_common = ad_loc.loc[ad_loc["SNP"].isin(common["SNP"])].copy()
-        scz_common = scz_loc.loc[scz_loc["SNP"].isin(common["SNP"])].copy()
-        lon_common = lon_loc.loc[lon_loc["SNP"].isin(common["SNP"])].copy()
-
-        ad_common = ad_common.sort_values(["CHR","BP","SNP"]).reset_index(drop=True)
-        scz_common = scz_common.sort_values(["CHR","BP","SNP"]).reset_index(drop=True)
-        lon_common = lon_common.sort_values(["CHR","BP","SNP"]).reset_index(drop=True)
-
-        locus_dir = out_dir / f"locus_chr{chr_}_{start}_{end}"
-        locus_dir.mkdir(parents=True, exist_ok=True)
-
-        ad_common.to_csv(locus_dir / "gwas_AD.ldgwas.tsv", sep="\t", index=False)
-        scz_common.to_csv(locus_dir / "gwas_SCZ.ldgwas.tsv", sep="\t", index=False)
-        lon_common.to_csv(locus_dir / "gwas_LON.ldgwas.tsv", sep="\t", index=False)
-        pd.DataFrame({"SNP": common["SNP"]}).sort_values("SNP").to_csv(locus_dir / "common_snps.tsv", sep="\t", index=False)
+if __name__ == "__main__":
+    main()

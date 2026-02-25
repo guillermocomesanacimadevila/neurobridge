@@ -93,4 +93,8 @@ nextflow run main.nf \
 ## Single-cell Resources
 - **[CELLxGENE](https://chanzuckerberg.github.io/cellxgene-census/python-api.html)** – Single-cell Gene Expression Explorer  
 
+---
 
+## Get Started!
+
+- Install **[Nextflow](https://www.nextflow.io/)** **(25.10.0)**

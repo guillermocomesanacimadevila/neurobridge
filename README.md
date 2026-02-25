@@ -97,4 +97,6 @@ nextflow run main.nf \
 
 ## Get Started!
 
-- Install [`Nextflow`](https://www.nextflow.io/) `(>=25.10.0)`
+1. Install [`Nextflow`](https://www.nextflow.io/) `(>=25.10.0)`
+<br>
+2. AA

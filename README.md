@@ -98,5 +98,24 @@ nextflow run main.nf \
 ## Get Started!
 
 1. Install [`Nextflow`](https://www.nextflow.io/) `(>=25.10.0)`
-<br>
-2. AA
+
+2. Install [`Docker`](https://www.docker.com/) or [`Singularity`](https://docs.sylabs.io/guides/3.0/user-guide/)
+
+3. Clone repo and run!
+   
+```bash
+git clone https://github.com/guillermocomesanacimadevila/neurobridge.git
+```
+
+```bash
+cd neurobridge/
+```
+
+```bash
+nextflow run main.nf \
+  -profile docker \
+  -c conf/local/nextflow.config \
+  --input assets/gwas.tsv \
+  --pairs assets/ldsc_pairs.tsv \
+  --outdir results
+```

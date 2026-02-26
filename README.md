@@ -119,3 +119,14 @@ nextflow run main.nf \
   --pairs assets/ldsc_pairs.tsv \
   --outdir results
 ```
+
+---
+
+```bash
+nextflow run main.nf \
+  -profile docker \
+  -c conf/local/nextflow.config \
+  --input assets/gwas.tsv \
+  --pairs assets/ldsc_pairs.tsv \
+  --outdir results -resume
+```

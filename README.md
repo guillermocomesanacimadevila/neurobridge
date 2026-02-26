@@ -84,7 +84,9 @@ nextflow run main.nf \
 
 ## Fine-mapping & Colocalisation
 - **[COLOC](https://cran.r-project.org/web/packages/coloc/)** – Bayesian Colocalisation Analysis  
-- **[SuSiE](https://github.com/stephenslab/susieR)** – Sum of Single Effects  
+- **[SuSiE](https://github.com/stephenslab/susieR)** – Sum of Single Effects
+- **[FINEMAP](http://www.christianbenner.com)** – Bayesian Fine-Mapping
+
 
 ## Functional Annotation & QTL Integration
 - **[FUMA](https://fuma.ctglab.nl/)** – Functional Mapping and Annotation  

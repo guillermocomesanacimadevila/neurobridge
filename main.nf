@@ -4,6 +4,7 @@ nextflow.enable.dsl=2
 include { QC_GWAS }        from './modules/qc_gwas'
 include { ADD_NEFF }       from './modules/add_neff'
 include { LDSC_PAIRWISE }  from './subworkflows/ldsc_pairwise'
+include { HDL_L_PAIRS }    from './subworkflows/hdl_pairs'
 
 // nextflow run main.nf -profile local --input assets/gwas.tsv --pairs assets/ldsc_pairs.tsv --outdir results
 // nextflow run main.nf -profile docker --input assets/gwas.tsv --pairs assets/ldsc_pairs.tsv --outdir results
@@ -53,9 +54,9 @@ workflow {
       tuple(meta, file(row.gwas))
     }
 
-  ch_qc     = QC_GWAS(ch_in).ldsc_ready
-  ch_neff   = ADD_NEFF(ch_qc).ldsc_neff
-  ch_sum    = ch_neff.map { meta, f -> tuple(meta.id, f) }
+  ch_qc = QC_GWAS(ch_in).ldsc_ready
+  ch_neff = ADD_NEFF(ch_qc).ldsc_neff
+  ch_sum = ch_neff.map { meta, f -> tuple(meta.id, f) }
 
   ch_pairs = Channel
     .fromPath(params.pairs)
@@ -83,4 +84,42 @@ workflow {
     .map { trait2, meta, f1, f2 -> tuple(meta, f1, f2) }
 
   LDSC_PAIRWISE(ch_ldsc_in)
+
+  /* HDL_L now
+  trait1.sumstats
+  trait2.sumstats
+  meta.trait1
+  meta.trait2
+  meta.beta1
+  meta.se1
+  meta.beta2
+  meta.se2 */
+
+ch_neff_key = ch_neff.map { meta, f -> tuple(meta.id, f) }
+ch_pairs_hdl = Channel
+  .fromPath(params.pairs)
+  .splitCsv(header:true, sep:'\t')
+  .map { row ->
+    def meta = [
+      trait1: row.trait1.toString().trim(),
+      trait2: row.trait2.toString().trim()
+    ]
+    tuple(meta.trait1, meta.trait2, meta)
+  }
+
+ch_hdl_with_t1 = ch_pairs_hdl
+  .join(ch_neff_key, by: 0)
+  .map { trait1, trait2, meta, f1 ->
+    def m = meta + [ beta1: "BETA", se1: "SE" ]
+    tuple(trait2, m, f1)
+  }
+
+ch_hdl_in = ch_hdl_with_t1
+  .join(ch_neff_key, by: 0)
+  .map { trait2, meta, f1, f2 ->
+    def m = meta + [ beta2: "BETA", se2: "SE" ]
+    tuple(m, f1, f2)
+  }
+
+HDL_L_PAIRS(ch_hdl_in)
 }

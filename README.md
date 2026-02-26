@@ -99,7 +99,7 @@ nextflow run main.nf \
 
 1. Install [`FINEMAP`](http://www.christianbenner.com)
 
-2. Move `finemap_v*.tgz` to [`ref/`]
+2. Move `finemap_v*.tgz` to `ref/`
 
 ```bash
 mv ~/finemap_v*.tgz neurobridge/ref

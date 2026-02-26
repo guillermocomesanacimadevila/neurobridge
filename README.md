@@ -102,14 +102,18 @@ nextflow run main.nf \
 2. Move `finemap_v*.tgz` to `ref/`
 
 ```bash
-mv ~/finemap_v*.tgz neurobridge/ref
+mkdir -p neurobridge/cont/finemap
+```
+
+```bash
+mv ~/finemap_v*.tgz neurobridge/cont/finemap
 ```
 
 3. Unpack!
 
 ```bash
-cd ref/
-tar -xzf finemap_v1.4.2_MacOSX.tgz
+cd cont/finemap/
+tar -xzf finemap_v1.4.2_MacOSX.tgz --strip-components=1 
 ```
 
 ---

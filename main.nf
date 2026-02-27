@@ -12,6 +12,36 @@ nextflow.enable.dsl=2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */ 
 
+def GREEN = '\033[38;5;40m'   
+def DARK = '\033[38;5;236m'  
+def BOLD = '\033[1m'
+def RESET = '\033[0m'
+
+println """
+${GREEN}${BOLD}
+ ███╗   ██╗███████╗       ██████╗ ██████╗ ██████╗ ███████╗
+ ████╗  ██║██╔════╝      ██╔════╝██╔═══██╗██╔══██╗██╔════╝
+ ██╔██╗ ██║█████╗  █████╗██║     ██║   ██║██████╔╝█████╗
+ ██║╚██╗██║██╔══╝  ╚════╝██║     ██║   ██║██╔══██╗██╔══╝
+ ██║ ╚████║██║            ╚██████╗╚██████╔╝██║  ██║███████╗
+ ╚═╝  ╚═══╝╚═╝             ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+${RESET}
+
+${GREEN}${BOLD}
+███╗   ██╗███████╗██╗   ██╗██████╗  ██████╗ ██████╗ ██████╗ ██╗██████╗  ██████╗ ███████╗
+████╗  ██║██╔════╝██║   ██║██╔══██╗██╔═══██╗██╔══██╗██╔══██╗██║██╔══██╗██╔════╝ ██╔════╝
+██╔██╗ ██║█████╗  ██║   ██║██████╔╝██║   ██║██████╔╝██████╔╝██║██║  ██║██║  ███╗█████╗
+██║╚██╗██║██╔══╝  ██║   ██║██╔══██╗██║   ██║██╔══██╗██╔══██╗██║██║  ██║██║   ██║██╔══╝
+██║ ╚████║███████╗╚██████╔╝██   ██╔╝╚█████╔╝███████║██║  ██║██║██████╔╝╚██████╔╝███████╗
+╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═════╝  ╚═════╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═════╝  ╚═════╝ ╚══════╝
+${RESET}
+
+    Escott-Price Lab | UKDRI Cardiff
+    v${workflow.manifest.version ?: 'dev'}
+
+------------------------------------------------------------
+"""
+
 include { QC_GWAS }        from './modules/qc_gwas'
 include { ADD_NEFF }       from './modules/add_neff'
 include { LDSC_PAIRWISE }  from './subworkflows/ldsc_pairwise'
@@ -32,7 +62,7 @@ workflow {
     .fromPath(params.input)
     .splitCsv(header:true, sep:'\t')
     .map { row ->
-    
+
       def meta                = [:]
       meta.id                 = row.id.toString().trim()
       meta.sep                = row.sep ? row.sep.replace('\\t','\t') : '\t'
@@ -82,6 +112,9 @@ workflow {
   */
   ld_path      = file("${workflow.launchDir}/ref/HDL-L_ref/LD.path")
   bim_path     = file("${workflow.launchDir}/ref/HDL-L_ref/bimfile")
+
+  // ref (SumHer)
+  plink_ref    = file("${workflow.launchDir}/ref/ldsc/1000G_EUR_Phase3_plink/1000G.EUR.QC") 
 
   // QC + NEFF
   ch_qc        = QC_GWAS(ch_in, qc_script).ldsc_ready
@@ -155,4 +188,9 @@ workflow {
     ld_path,
     bim_path
   )
+
+  /*
+  SumHer (LDAK)
+  */
+  params.ldak = "${workflow.launchDir}/ref/SumHer/LDAK/${params.ldak_os}"
 }

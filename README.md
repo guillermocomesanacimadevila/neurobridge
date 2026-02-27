@@ -118,6 +118,12 @@ cd cont/finemap/
 tar -xzf finemap_v1.4.2_MacOSX.tgz --strip-components=1 
 ```
 
+4. *IMPORTANT* -> remove .tgz file
+
+```bash
+rm -rf /cont/finemap/*.tgz
+```
+
 ---
 
 ## Get Started!

@@ -46,9 +46,16 @@ include { QC_GWAS }        from './modules/qc_gwas'
 include { ADD_NEFF }       from './modules/add_neff'
 include { LDSC_PAIRWISE }  from './subworkflows/ldsc_pairwise'
 include { HDL_L_PAIRS }    from './subworkflows/hdl_pairs'
+include { SUMHER_RUN }     from './subworkflows/sumher_run'
 
 // nextflow run main.nf -profile local  -c conf/local/nextflow.config --input assets/gwas.tsv --pairs assets/ldsc_pairs.tsv --outdir results
 // nextflow run main.nf -profile docker -c conf/local/nextflow.config --input assets/gwas.tsv --pairs assets/ldsc_pairs.tsv --outdir results
+
+/*
+pre-run check;
+-> if workflow.launchDir != nerurobridge -> cd neurobridge/
+*/
+
 
 workflow {
 
@@ -96,30 +103,42 @@ workflow {
     }
 
   // scr
-  qc_script    = file("${workflow.launchDir}/bin/qc_gwas.py")
-  neff_script  = file("${workflow.launchDir}/bin/compute_neff.py")
-  ldsc_r       = file("${workflow.launchDir}/bin/ldsc.R")
-  hdl_l_r      = file("${workflow.launchDir}/bin/hdl_l.R")
+  qc_script = file("${workflow.launchDir}/bin/qc_gwas.py")
+  neff_script = file("${workflow.launchDir}/bin/compute_neff.py")
+  ldsc_r = file("${workflow.launchDir}/bin/ldsc.R")
+  hdl_l_r = file("${workflow.launchDir}/bin/hdl_l.R")
+  calc_p = file("${workflow.launchDir}/bin/calc_p.py")
+
+  // ~~~~~~~~ ~~~~~~~~~~~~~~~ ~~~~~~~~ // 
+  // ~~~~~~~~ ~~~~~~~~~~~~~~~ ~~~~~~~~ // 
+  // ~~~~~~~~ REFERENCE FILES ~~~~~~~~ //
+  // ~~~~~~~~ ~~~~~~~~~~~~~~~ ~~~~~~~~ // 
+  // ~~~~~~~~ ~~~~~~~~~~~~~~~ ~~~~~~~~ // 
 
   // refs (LDSC)
-  hm3_snplist  = file("${workflow.launchDir}/ref/ldsc/w_hm3.snplist")
-  ld_chr_dir   = file("${workflow.launchDir}/ref/ldsc/eur_w_ld_chr")
-  wld_dir      = file("${workflow.launchDir}/ref/ldsc/weights_hm3_no_hla")
+  hm3_snplist = file("${workflow.launchDir}/ref/ldsc/w_hm3.snplist")
+  ld_chr_dir = file("${workflow.launchDir}/ref/ldsc/eur_w_ld_chr")
+  wld_dir = file("${workflow.launchDir}/ref/ldsc/weights_hm3_no_hla")
 
   // refs (HDL-L)
-  /*
-  Fix this shit (attempt 8)
-  */
-  ld_path      = file("${workflow.launchDir}/ref/HDL-L_ref/LD.path")
-  bim_path     = file("${workflow.launchDir}/ref/HDL-L_ref/bimfile")
+  ld_path = file("${workflow.launchDir}/ref/HDL-L_ref/LD.path")
+  bim_path = file("${workflow.launchDir}/ref/HDL-L_ref/bimfile")
 
   // ref (SumHer)
-  plink_ref    = file("${workflow.launchDir}/ref/ldsc/1000G_EUR_Phase3_plink/1000G.EUR.QC") 
+  plink_dir = file("${workflow.launchDir}/ref/ldsc/1000G_EUR_Phase3_plink")
+  ldak_bin = file("${workflow.launchDir}/ref/SumHer/LDAK/${params.ldak_os}")
+
+  // ~~~~~~~~ ~~~~~~~~~~~~~~~ ~~~~~~~~ // 
+  // ~~~~~~~~ ~~~~~~~~~~~~~~~ ~~~~~~~~ // 
+  // ~~~~~~~~  ~~~~~~~~~~~~~~ ~~~~~~~~ //
+  // ~~~~~~~~ ~~~~~~~~~~~~~~~ ~~~~~~~~ // 
+  // ~~~~~~~~ ~~~~~~~~~~~~~~~ ~~~~~~~~ // 
 
   // QC + NEFF
-  ch_qc        = QC_GWAS(ch_in, qc_script).ldsc_ready
-  ch_neff      = ADD_NEFF(ch_qc, neff_script).ldsc_neff
-  ch_sum       = ch_neff.map { meta, f -> tuple(meta.id, f) }
+  ch_qc = QC_GWAS(ch_in, qc_script).ldsc_ready
+  ch_neff = ADD_NEFF(ch_qc, neff_script).ldsc_neff
+  ch_sum = ch_neff.map { meta, f -> tuple(meta.id, f) }
+  ch_sumstats = ch_neff.map { meta, f -> tuple(meta, f) }
 
   ch_pairs = Channel
     .fromPath(params.pairs)
@@ -192,5 +211,27 @@ workflow {
   /*
   SumHer (LDAK)
   */
-  params.ldak = "${workflow.launchDir}/ref/SumHer/LDAK/${params.ldak_os}"
+
+  ch__sumher_pairs = Channel
+    .fromPath(params.pairs)
+    .splitCsv(header:true, sep:'\t')
+    .map { row ->
+      def meta = [
+        trait1: row.trait1.toString().trim(),
+        trait2: row.trait2.toString().trim()
+      ]
+      tuple(meta.trait1, meta.trait2, meta)
+    }
+
+  SUMHER_RUN(
+    ch_sumstats,
+    ch__sumher_pairs,
+    plink_dir,
+    calc_p,
+    ldak_bin
+  )
+  
+  /*
+  MiXeR
+  */
 }

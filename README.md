@@ -126,7 +126,7 @@ nextflow run main.nf \
 > You can also run each method within [`workflows/neurobridge`], individually like so =>
 
 ```bash
-nextflow run main<method>.nf \
+nextflow run workflows/neurobridge/main_<input_method>.nf \
   -profile docker \
   -c conf/local/nextflow.config \
   --input assets/gwas.tsv \

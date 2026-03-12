@@ -39,7 +39,7 @@
 
 ### Download reference data 
 
-Download from Zenodo  **[here](https://doi.org/10.5281/zenodo.18986935)** 
+> Download **[here](https://doi.org/10.5281/zenodo.18986935)** 
 
 ---
 

@@ -28,7 +28,7 @@
 ## Pipeline
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/318d1e31-0309-4d91-9d9b-c4b837a6e963"
+  <img src="https://github.com/user-attachments/assets/a15c8413-a93c-43b7-b647-b0fa5a38def2"
        alt="pipeline"
        width="1200">
 </p>

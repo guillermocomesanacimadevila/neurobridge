@@ -51,6 +51,12 @@
 
 ---
 
+### Adjust parameters
+
+> Configure [`assets/params.stage1.yaml`] to your desired parameter set (**default parameters provided**).
+
+---
+
 ### Build Docker image
 
 ```bash

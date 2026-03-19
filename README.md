@@ -141,9 +141,7 @@ nextflow run main.nf \
 nextflow run workflows/neurobridge/main_<input_method>.nf \
   -profile docker \
   -c conf/local/nextflow.config \
-  --input assets/gwas.tsv \
-  --pairs assets/ldsc_pairs.tsv \
-  --outdir results 
+  -params-file assets/params.stage1.yaml 
 ```
 
 ---

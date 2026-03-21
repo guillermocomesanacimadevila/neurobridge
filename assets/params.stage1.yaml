@@ -20,6 +20,16 @@ maf_min: 0.01        # Minimum minor allele frequency threshold (variants below 
 info_min: 0.90       # Minimum imputation INFO score threshold
 
 # -----------------------------------------------------------------------------
+# LDSC (pairwise)
+# -----------------------------------------------------------------------------
+ldsc_maf_filter: 0.01
+ldsc_info_filter: 0.9
+ldsc_mean_chisq_min: 1.02
+ldsc_intercept_min: 0.9
+ldsc_intercept_max: 1.1
+ldsc_h2_z_min: 2.0
+
+# -----------------------------------------------------------------------------
 # SumHer (LDAK-based heritability / rg)
 # -----------------------------------------------------------------------------
 power: -0.25         # LDAK heritability model parameter (recommended default)
@@ -27,9 +37,12 @@ thresh: 0.01         # SNP inclusion threshold for tagging / model fitting
 do_tagging: false    # Whether to run LDAK tagging step (required for full SumHer workflow)
 
 # -----------------------------------------------------------------------------
-# HDL-L (local genetic correlation)
+# HDL (global genetic correlation)
 # -----------------------------------------------------------------------------
-cov_min: 0           # Minimum coverage threshold for local rg estimation
+hdl_eigen_cut: 0.95      # Proportion of eigenvalues retained in HDL decomposition
+hdl_N0: 0                # Sample overlap parameter (0 if assuming no overlap)
+hdl_lim: 1.522998e-08    # Numerical tolerance for HDL (exp(-18))
+hdl_jackknife: true      # Whether to compute block jackknife SE
 
 # -----------------------------------------------------------------------------
 # LD clumping (PLINK) — applied to conjFDR hits
